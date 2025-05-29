@@ -1,0 +1,101 @@
+{
+  "Sri Lanka": [
+    {
+      "provider": "Gold Route",
+      "package": "MeetSuite Elite",
+      "inclusions": [
+        "Personalised meet & greet at the arrival terminal",
+    "Dedicated representative to assist with immigration, customs & check-in",
+    "Exclusive Elite Lounge access with complimentary refreshments and Wi-Fi",
+    "Direct transfer to a private vehicle from the lounge"
+      ],
+      "price": "$250 per person"
+    },
+    {
+      "provider": "Silk Route",
+      "package": "MeetSuite Prestige",
+      "inclusions": [
+         "Arrival and Departure Meet & Greet",
+    "Fast-track immigration for both arrival and departure",
+    "Executive Lounge access including refreshments, concierge services, and Wi-Fi",
+    "Personal escort throughout both arrival and departure processes",
+    "Complimentary access for children under 2 years"
+      ],
+      "price": "$240 per person"
+    },
+    {
+      "provider": "Silk Route",
+      "package": "MeetSuite Express",
+      "inclusions": [
+       "Arrival & Departure assistance",
+    "Meet & Greet with fast-track immigration",
+    "Baggage handling support",
+    "No lounge access",
+    "Complimentary access for children under 2 years"
+      ],
+      "price": "$120 per person"
+    },
+    {
+      "provider": "Silk Route",
+      "package": "MeetSuite Horizon Welcome",
+      "inclusions": [
+        "Combined Arrival & Departure assistance",
+        "Personalized greeting and escort during both legs",
+        "Assistance with fast-track immigration and baggage handling",
+        "Standard meet & greet service (no lounge access)",
+        "Children under 2 years free"
+      ],
+      "price": "$75 per person"
+    },
+    {
+      "provider": "Silk Route",
+      "package": "MeetSuite Horizon Farewell",
+      "inclusions": [
+       "Meet & Greet at the departure terminal",
+    "Fast-track through check-in, security, and immigration",
+    "Escort to the departure gate",
+    "Complimentary access for children under 2 years"
+      ],
+      "price": "$75 per person"
+    }
+ 
+  ],
+
+  "Maldives": [
+    {
+      "provider": "MeetSuite Elite",
+      "package": "Sky Meet & Greet",
+      "inclusions": [
+        "Personalised Meet & Greet at arrival terminal",
+        "Dedicated assistance with immigration, customs & check-in",
+        "Lounge access",
+        "Direct transfer to private vehicle from the lounge"
+      ],
+      "price": "$285 per person"
+    },
+    {
+      "provider": "MeetSuite Elite",
+      "package": "MeetSuite Express",
+      "inclusions": [
+         "Arrival assistance",
+    "Meet & Greet with fast-track immigration",
+    "Baggage handling support",
+    "No lounge access",
+    "Complimentary access for children under 2 years"
+      ],
+      "price": "$85 per person"
+    },
+    {
+      "provider": "MeetSuite Elite",
+      "package": "MeetSuite Express",
+      "inclusions": [
+        "Departure assistance",
+    "Meet & Greet with fast-track immigration",
+    "Baggage handling support",
+    "No lounge access",
+    "Complimentary access for children under 2 years"
+      ],
+      "price": "$85 per person"
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+[
+  {
+    "title": "Standard Taxi Service",
+    "slug": "Standard-Taxi-Service",
+    "category": "Transportation Services",
+    "backgroundImage": "/assets/car2.jpg",
+    "intro": "For passengers who prefer a quick and efficient transfer, our reliable taxi service offers safe rides from the airport to your destination. Ideal for solo travellers or small groups, this budget-friendly option is available 24/7 with licensed, vetted drivers and fixed rates to avoid surprises.",
+    "features": [
+      {
+        "title": "Meet & Greet",
+        "icon": "👋",
+        "description": "Enjoy a warm welcome with a dedicated representative as soon as you arrive at the terminal."
+      },
+      {
+        "title": "Fast Track Immigration",
+        "icon": "✈️",
+        "description": "Skip long queues with priority access through immigration and security checks."
+      },
+      {
+        "title": "Lounge Access",
+        "icon": "🛋️",
+        "description": "Relax in premium airport lounges with top-class amenities and refreshments."
+      },
+      {
+        "title": "Luxury Transfers",
+        "icon": "🚗",
+        "description": "Travel in style with chauffeur-driven luxury vehicles to/from the airport."
+      },
+      {
+        "title": "Personalized Assistance",
+        "icon": "🙋‍♂️",
+        "description": "From baggage handling to ticketing, our team is ready to cater to your every need."
+      },
+      {
+        "title": "Privacy & Security",
+        "icon": "🔒",
+        "description": "Experience discreet, secure, and seamless airport movement with total confidentiality."
+      }
+    ]
+  },
+  {
+    "title": "Chauffeur-Driven Luxury Car",
+    "slug": "Chauffeur-Driven-Luxury-Car",
+    "category": "Transportation Services",
+    "backgroundImage": "/assets/car3.jpg",
+    "intro": "Make a statement with our premium chauffeur service. Travel in style with high-end vehicles and top-tier service tailored to VIPs, executives, and guests who expect only the best. From the moment you’re greeted to your final stop, enjoy an elevated journey marked by discretion, elegance, and comfort.",
+    "features": [
+      {
+        "title": "Meet & Greet",
+        "icon": "👋",
+        "description": "Enjoy a warm welcome with a dedicated representative as soon as you arrive at the terminal."
+      },
+      {
+        "title": "Fast Track Immigration",
+        "icon": "✈️",
+        "description": "Skip long queues with priority access through immigration and security checks."
+      },
+      {
+        "title": "Lounge Access",
+        "icon": "🛋️",
+        "description": "Relax in premium airport lounges with top-class amenities and refreshments."
+      },
+      {
+        "title": "Luxury Transfers",
+        "icon": "🚗",
+        "description": "Travel in style with chauffeur-driven luxury vehicles to/from the airport."
+      },
+      {
+        "title": "Personalized Assistance",
+        "icon": "🙋‍♂️",
+        "description": "From baggage handling to ticketing, our team is ready to cater to your every need."
+      },
+      {
+        "title": "Privacy & Security",
+        "icon": "🔒",
+        "description": "Experience discreet, secure, and seamless airport movement with total confidentiality."
+      }
+    ]
+  },
+  {
+    "title": "Chauffeur-Driven Standard Car ",
+    "slug": "Chauffeur-Driven-Standard-Car",
+    "category": "Transportation Services",
+    "backgroundImage": "/assets/car1.jpg",
+    "intro": "Experience a smooth, stress-free ride with our chauffeur-driven service. Enjoy a clean, comfortable vehicle with a professional driver who ensures a punctual and courteous experience, perfect for business travellers or families looking for a dependable door-to-door solution.",
+    "features": [
+      {
+        "title": "On-Demand Buggy",
+        "icon": "🛺",
+        "description": "Get quick buggy access whenever needed within the terminal."
+      },
+      {
+        "title": "Comfortable Seating",
+        "icon": "💺",
+        "description": "Spacious and cushioned seating for maximum comfort during travel."
+      },
+      {
+        "title": "Accessibility Support",
+        "icon": "♿",
+        "description": "Perfect for elderly or mobility-impaired travelers."
+      },
+      {
+        "title": "Assisted Boarding",
+        "icon": "🙌",
+        "description": "Buggy assistance to and from gates for stress-free boarding."
+      },
+      {
+        "title": "Family-Friendly",
+        "icon": "👨‍👩‍👧‍👦",
+        "description": "Ideal for families with small children and lots of luggage."
+      }
+    ]
+  }
+
+
+
+  
+  
+]
