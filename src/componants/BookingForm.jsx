@@ -15,17 +15,19 @@ const BookingForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    phone: '',
     whatsapp: '',
     flightNumber: '',
     travelDate: '',
     transitDetails: '',
+    comments: '',
   });
   const [formStatus, setFormStatus] = useState({ message: '', isError: false });
-  const [isLoading, setIsLoading] = useState(false); // New loading state
+  const [isLoading, setIsLoading] = useState(false);
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
 
   const guestDropdownRef = useRef(null);
   const baggageDropdownRef = useRef(null);
+  const recaptchaRef = useRef(null);
 
   const airportNames = {
     CMB: "CMB - Colombo Bandaranaike International Airport",
@@ -66,7 +68,6 @@ const BookingForm = () => {
         description: `- Arrival & Departure assistance
 - Meet & Greet with fast-track immigration
 - Baggage handling support
-- No lounge access
 - Children under 2 years free`,
         price: '$120 per person',
       },
@@ -120,7 +121,6 @@ const BookingForm = () => {
         description: `- Arrival assistance
 - Meet & Greet with fast-track immigration
 - Baggage handling support
-- No lounge access
 - Children under 2 years free`,
         price: '$85',
       },
@@ -170,9 +170,46 @@ const BookingForm = () => {
   };
 
   useEffect(() => {
+    const loadRecaptcha = () => {
+      if (!window.grecaptcha) {
+        const script = document.createElement('script');
+        script.src = 'https://www.google.com/recaptcha/api.js';
+        script.async = true;
+        script.onload = () => {
+          console.log('reCAPTCHA script loaded');
+        };
+        script.onerror = () => {
+          console.error('Failed to load reCAPTCHA script');
+        };
+        document.body.appendChild(script);
+      }
+    };
+
+    loadRecaptcha();
+
+    const handleRecaptchaEvent = (event) => {
+      console.log('reCAPTCHA token:', event.detail);
+      setRecaptchaToken(event.detail);
+    };
+    document.addEventListener('recaptchaCallback', handleRecaptchaEvent);
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('recaptchaCallback', handleRecaptchaEvent);
+      document.removeEventListener('mousedown', handleClickOutside);
+      const script = document.querySelector('script[src="https://www.google.com/recaptcha/api.js"]');
+      if (script) {
+        document.body.removeChild(script);
+      }
+    };
   }, []);
+
+  const resetRecaptcha = () => {
+    if (window.grecaptcha && recaptchaRef.current) {
+      window.grecaptcha.reset();
+      setRecaptchaToken(null);
+    }
+  };
 
   const handleIncrement = (type) => {
     setGuests((prev) => ({ ...prev, [type]: prev[type] + 1 }));
@@ -193,7 +230,15 @@ const BookingForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormStatus({ message: '', isError: false });
-    setIsLoading(true); // Start loading
+    setIsLoading(true);
+
+    console.log('reCAPTCHA token before submission:', recaptchaToken);
+
+    if (!recaptchaToken) {
+      setFormStatus({ message: 'Please complete the reCAPTCHA', isError: true });
+      setIsLoading(false);
+      return;
+    }
 
     const payload = {
       tripType,
@@ -202,13 +247,15 @@ const BookingForm = () => {
       service: selectedService,
       name: formData.name,
       email: formData.email,
-      phone: formData.phone,
+  
       whatsapp: formData.whatsapp,
       guests,
       baggageCount,
       flightNumber: formData.flightNumber,
       travelDate: formData.travelDate,
       transitDetails: formData.transitDetails,
+      comments: formData.comments,
+      recaptchaToken,
     };
 
     try {
@@ -221,15 +268,15 @@ const BookingForm = () => {
       const result = await response.json();
       if (response.ok) {
         setFormStatus({ message: result.message, isError: false });
-        // Reset form
         setFormData({
           name: '',
           email: '',
-          phone: '',
+         
           whatsapp: '',
           flightNumber: '',
           travelDate: '',
           transitDetails: '',
+          comments: '',
         });
         setGuests({ adults: 1, children: 0, infants: 0 });
         setBaggageCount(1);
@@ -241,15 +288,16 @@ const BookingForm = () => {
         setFormStatus({ message: result.error || 'Failed to submit booking', isError: true });
       }
     } catch (error) {
+      console.error('Form submission error:', error);
       setFormStatus({ message: 'Error connecting to server', isError: true });
     } finally {
-      setIsLoading(false); // Stop loading
+      setIsLoading(false);
+      resetRecaptcha();
     }
   };
 
   const guestSummary = `${guests.adults} Adult${guests.adults !== 1 ? 's' : ''}, ${guests.children} Child${guests.children !== 1 ? 'ren' : ''}, ${guests.infants} Infant${guests.infants !== 1 ? 's' : ''}`;
 
-  
   return (
     <ScrollFadeIn>
       <div className="bg-transparent backdrop-blur-xl rounded-xl shadow-md w-full max-w-[90%] md:max-w-[48rem] lg:max-w-[72rem] xl:max-w-[80rem] mx-auto mt-30 relative z-10">
@@ -269,6 +317,7 @@ const BookingForm = () => {
                 value={type}
                 onChange={(e) => setTripType(e.target.value)}
                 checked={tripType === type}
+                required
               />
               {type}
             </label>
@@ -277,11 +326,13 @@ const BookingForm = () => {
 
         <form className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-6 text-white" onSubmit={handleSubmit}>
           <select
-            className="w-full border rounded-md p-2 "
+            className="w-full border rounded-md p-2"
             value={selectedCountry}
             onChange={(e) => {
-              setSelectedCountry(e.target.value);
-              setSelectedAirportCode('');
+              const country = e.target.value;
+              setSelectedCountry(country);
+              const airports = airportsByCountry[country] || [];
+              setSelectedAirportCode(airports.length > 0 ? airports[0] : '');
               setSelectedService('');
             }}
             required
@@ -303,7 +354,7 @@ const BookingForm = () => {
             required
           >
             <option value="" className='bg-black'>
-              {selectedCountry ? 'Select Airport' : 'Select a country first'}
+              {selectedCountry ? 'Select Airport' : 'Select Airport (Select a country first)'}
             </option>
             {selectedCountry &&
               airportsByCountry[selectedCountry].map((airportCode) => (
@@ -319,9 +370,8 @@ const BookingForm = () => {
               onClick={() => setModalOpen(true)}
               className="w-full border rounded-md p-2 text-left"
               disabled={!selectedAirportCode}
-              required
             >
-              {selectedService || (selectedAirportCode ? 'Select Service' : 'Select an airport first')}
+              {selectedService || (selectedAirportCode ? 'Select Service' : 'Select services (Select an airport first)')}
             </button>
           </div>
 
@@ -329,7 +379,7 @@ const BookingForm = () => {
             <div className="fixed inset-0 bg-transparent bg-opacity-50 z-50 flex items-center justify-center p-4">
               <div className="bg-white max-w-4xl w-full shadow-lg rounded-xl p-6 relative">
                 <button
-                  className="absolute top-2 right-4 text-xl font-bold text-[#000] hover:text-[#BE965B] transition"
+                  className="absolute abso lute top-2 right-4 text-xl font-bold text-[#000] hover:text-[#BE965B] transition"
                   onClick={() => setModalOpen(false)}
                 >
                   <FaTimes className="text-2xl" />
@@ -354,7 +404,6 @@ const BookingForm = () => {
                         setSelectedService(service.package);
                         setModalOpen(false);
                       }}
-                      required
                     >
                       <div className="font-bold text-black">{service.package}</div>
                       {service.description && (
@@ -381,7 +430,7 @@ const BookingForm = () => {
               value={formData.name}
               onChange={handleInputChange}
               placeholder="Name"
-              className="w-full border rounded-md p-2 "
+              className="w-full border rounded-md p-2"
               required
             />
           </div>
@@ -392,6 +441,42 @@ const BookingForm = () => {
             value={formData.email}
             onChange={handleInputChange}
             placeholder="Email"
+            className="w-full border rounded-md p-2"
+            required
+          />
+
+          <div className="relative w-full">
+            <input
+              type="date"
+              name="travelDate"
+              value={formData.travelDate}
+              onChange={handleInputChange}
+              placeholder="Travel Date"
+              className="w-full border rounded-md p-2"
+              required
+            />
+            <FaCalendarAlt className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white pointer-events-none" />
+          </div>
+
+          <div className="relative">
+            <input
+              type="tel"
+              name="whatsapp"
+              value={formData.whatsapp}
+              onChange={handleInputChange}
+              placeholder="Whatsapp"
+              className="w-full border rounded-md p-2 pl-10"
+              required
+            />
+            <span className="absolute left-3 top-2.5 text-green-500 text-xl"><FaWhatsapp/></span>
+          </div>
+
+           <input
+            type="text"
+            name="flightNumber"
+            value={formData.flightNumber}
+            onChange={handleInputChange}
+            placeholder="Enter Your Flight Number e.g. UA918"
             className="w-full border rounded-md p-2"
             required
           />
@@ -438,29 +523,7 @@ const BookingForm = () => {
             )}
           </div>
 
-          <div className="relative">
-            <input
-              type="tel"
-              name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              placeholder="Phone Number"
-              className="w-full border rounded-md p-2 pl-10"
-            />
-            <span className="absolute left-3 top-2.5 text-gray-500">📞</span>
-          </div>
-
-          <div className="relative">
-            <input
-              type="tel"
-              name="whatsapp"
-              value={formData.whatsapp}
-              onChange={handleInputChange}
-              placeholder="Whatsapp"
-              className="w-full border rounded-md p-2 pl-10"
-            />
-            <span className="absolute left-3 top-2.5 text-green-500 text-xl"><FaWhatsapp/></span>
-          </div>
+          
 
           <div className="relative w-full" ref={baggageDropdownRef}>
             <div
@@ -495,26 +558,9 @@ const BookingForm = () => {
             )}
           </div>
 
-          <input
-            type="text"
-            name="flightNumber"
-            value={formData.flightNumber}
-            onChange={handleInputChange}
-            placeholder="Enter Your Flight Number e.g. UA918"
-            className="w-full border rounded-md p-2"
-          />
+         
 
-          <div className="relative w-full">
-          <input
-            type="date"
-            name="travelDate"
-            value={formData.travelDate}
-            onChange={handleInputChange}
-            placeholder="Travel Date"
-            className="w-full border rounded-md p-2 "
-          />
-          <FaCalendarAlt className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white pointer-events-none" />
-          </div>
+          
 
           {tripType === 'Transit' && (
             <input
@@ -524,54 +570,79 @@ const BookingForm = () => {
               onChange={handleInputChange}
               placeholder="Transit Duration or City"
               className="w-full border rounded-md p-2"
+              required
             />
           )}
 
+          <div className="relative w-full">
+            <textarea
+              name="comments"
+              value={formData.comments}
+              onChange={handleInputChange}
+              rows="1"
+              placeholder="Additional Comments or Special Requests"
+              className="w-full border-2 rounded-md p-2 border-amber-300"
+            />
+          </div>
+
+          <div className="relative w-full">
+            <div
+              className="g-recaptcha"
+              data-sitekey="6LfWiFUrAAAAAKNKhYHVyBQkrE0f3bVXDpZbLk0w"
+              data-callback="handleRecaptcha"
+              ref={recaptchaRef}
+              style={{ minHeight: '78px' }}
+            ></div>
+          </div>
+
           <div className="flex justify-center items-center pb-6 col-span-full flex-col">
-  <button
-    type="submit"
-    className={`w-80 md:w-100 text-white px-6 py-2 rounded-md hover:scale-105 transition cursor-pointer flex items-center justify-center ${
-      isLoading ? 'bg-[#BE965B]/70 cursor-not-allowed' : 'bg-[#BE965B]'
-    }`}
-    disabled={isLoading}
-  >
-    {isLoading ? (
-      <>
-        <svg
-          className="animate-spin h-5 w-5 mr-3 text-white"
-          viewBox="0 0 24 24"
-        >
-          <circle
-            className="opacity-25"
-            cx="12"
-            cy="12"
-            r="10"
-            stroke="currentColor"
-            strokeWidth="4"
-          />
-          <path
-            className="opacity-75"
-            fill="currentColor"
-            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-          />
-        </svg>
-        Processing...
-      </>
-    ) : (
-      'BOOK NOW'
-    )}
-  </button>
-  {formStatus.message && (
-    <p className={`mt-4 ${formStatus.isError ? 'text-red-500' : 'text-green-500'}`}>
-      {formStatus.message}
-    </p>
-  )}
-</div>
+            <button
+              type="submit"
+              className={`w-80 md:w-100 text-white px-6 py-2 rounded-md hover:scale-105 transition cursor-pointer flex items-center justify-center ${
+                isLoading ? 'bg-[#BE965B]/70 cursor-not-allowed' : 'bg-[#BE965B]'
+              }`}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <svg
+                    className="animate-spin h-5 w-5 mr-3 text-white"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                  </svg>
+                  Processing...
+                </>
+              ) : (
+                'BOOK NOW'
+              )}
+            </button>
+            {formStatus.message && (
+              <p className={`mt-4 ${formStatus.isError ? 'text-red-500' : 'text-green-500'}`}>
+                {formStatus.message}
+              </p>
+            )}
+          </div>
         </form>
       </div>
     </ScrollFadeIn>
   );
 };
 
-export default BookingForm;
+window.handleRecaptcha = (token) => {
+  document.dispatchEvent(new CustomEvent('recaptchaCallback', { detail: token }));
+};
 
+export default BookingForm;

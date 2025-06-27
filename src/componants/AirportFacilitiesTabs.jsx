@@ -22,13 +22,13 @@ const cmbFacilities = [
     title: "Terminals",
     icon: <PlaneTakeoff className="w-6 h-6" color={iconColor} />,
     content:
-      "Terminal 1 (International - 12 gates), Terminal 2 (International- 8 gates), Terminal 3 (Domestic).",
+      "Terminal 1 serves as the main international terminal with 12 gates, handling a wide range of global carriers. It offers streamlined immigration, duty-free shopping, and premium passenger services, making it the central gateway for international arrivals and departures.",
   },
   {
     title: "Lounges",
     icon: <Briefcase className="w-6 h-6" color={iconColor} />,
     content:
-      "Serendib Lounge (with spa), Palm Spirit Lounge, Araliya Lounge, Executive Lounge, Silk Route, Gold Route, Lotus Lounge.",
+      "The airport offers a variety of lounges, each designed to suit different travel needs and preferences. From quiet spaces for relaxation to lounges equipped with business facilities and gourmet dining, passengers can choose the perfect environment to unwind or prepare for their journey.",
   },
   {
     title: "Shopping & Dining",
@@ -40,7 +40,7 @@ const cmbFacilities = [
     title: "Transit Hotel",
     icon: <Hotel className="w-6 h-6" color={iconColor} />,
     content:
-      "Serenediva Transit Hotel offers day rooms and rest without leaving the airport — ideal for layovers.",
+      "A convenient transit hotel located within the airport offers comfortable day rooms and rest facilities, perfect for passengers with layovers or long connections, without the need to leave the terminal.",
   },
   {
     title: "Other Amenities",
@@ -67,7 +67,7 @@ const mleFacilities = [
     title: "Lounge",
     icon: <Briefcase className="w-6 h-6" color={iconColor} />,
     content:
-      "Leeli Lounge offers snacks, drinks, and views for premium passengers or with day pass (if available).",
+      "A dedicated lounge offers light snacks, refreshing beverages, and scenic airport views, exclusively for premium passengers or those with a valid day pass, subject to availability.",
   },
   {
     title: "Shops & Restaurants",
@@ -99,7 +99,7 @@ export default function AirportFacilitiesTabs() {
 
   return (
     <div className="max-w-6xl mx-auto p-4 bg-[#222]">
-       <h1 className="text-3xl  font-bold mb-8 text-[#BE965B]">Meetsuite Experience</h1>
+       <h1 className="text-3xl  font-bold mb-8 text-[#BE965B]">Services at the Airport</h1>
       <div className="flex  gap-4 mb-6">
         <button
           className={`px-6 py-2 rounded-md cursor-pointer font-semibold ${
@@ -136,7 +136,7 @@ export default function AirportFacilitiesTabs() {
                 {facility.title}
               </h3>
             </div>
-            <p className="text-gray-100 text-sm">{facility.content}</p>
+            <p className="text-gray-100 text-sm text-justify">{facility.content}</p>
           </div>
         ))}
       </div>

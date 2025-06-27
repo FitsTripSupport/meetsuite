@@ -10,6 +10,7 @@ import CMBServices from '../componants/CMBServices'
 import TransportService from '../componants/TransportService'
 import FAQSection from '../componants/FAQSection'
 import AirportPage from '../componants/AirportPage'
+import BlogPreview from '../componants/BlogPreview'
 
 const Home = () => {
   return (
@@ -29,7 +30,7 @@ const Home = () => {
       {/* <TransportService/> */}
       <AirportPage/>
       <FAQSection />
-  
+  {/* <BlogPreview/> */}
       <Footer/>
     </div>
   )

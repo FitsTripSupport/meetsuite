@@ -28,7 +28,7 @@ function Hero() {
     initial={{ opacity: 0, y: 30 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay: 0.6, duration: 0.8 }}
-    className="mt-4 text-lg max-w-2xl text-justify"
+    className="mt-4 text-lg max-w-3xl text-justify"
   >
     "Redefining the way you travel exclusive concierge service at key airports across the globe."
   </motion.p> 

@@ -19,6 +19,9 @@ export default function Navbar() {
 <li>
           <Link to="services" smooth={true} duration={500} offset={-80} className="cursor-pointer hover:text-[#BE965B] hover:scale-105 transition duration-300">SERVICES</Link>
         </li>
+        {/* <li>
+          <Link to="blog" smooth={true} duration={500} offset={-80} className="cursor-pointer hover:text-[#BE965B] hover:scale-105 transition duration-300">BLOGS</Link>
+        </li> */}
         <li>
           <Link to="contact" smooth={true} duration={500} offset={-80} className="cursor-pointer hover:text-[#BE965B] hover:scale-105 transition duration-300">CONTACT US</Link>
         </li>
@@ -56,6 +59,16 @@ export default function Navbar() {
         >
           Services
         </Link>
+          {/* <Link
+            to="blog"
+            smooth={true}
+            duration={500}
+            offset={-80}
+            className="cursor-pointer hover:text-[#BE965B] text-lg"
+            onClick={() => setMenuOpen(false)}
+          >
+            Blogs
+          </Link> */}
         <Link
           to="contact"
           smooth={true}

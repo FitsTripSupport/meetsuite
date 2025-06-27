@@ -24,7 +24,7 @@ const CMBServices = () => {
   id="services" name="services"
 >
       <div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-3xl font-extrabold text-left mb-6 text-[#000]">Our Airport Services</h2>
+        <h2 className="text-3xl font-extrabold text-left mb-6 text-[#000]">Meetsuite Experience</h2>
 
         {/* Country Buttons */}
         <div className="flex flex-wrap gap-4 mb-8">
