@@ -10,7 +10,7 @@ export default function Navbar() {
     <nav className="absolute top-0 left-0 w-full flex items-center justify-between px-6 lg:px-16 py-8 lg:py-12 text-white z-50">
       {/* Logo */}
       <div>
-        <img src="/assets/MEETSUITE-LOGO-2-1.png" alt="Fts" className="w-32 md:w-60 pl-2 md:pl-16 " />
+        <img src="/assets/nav-logo.webp" alt="Fts" className="w-32 md:w-60 pl-2 md:pl-16 " />
       </div>
 
       {/* Desktop Navigation (Only visible on large screens) */}
